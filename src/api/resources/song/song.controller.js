@@ -8,6 +8,9 @@ export default {
 
         try {
 
+            const body = req.body;
+            const user = req.currentUser._id;
+
             const schema = Joi.object().keys({
                 title: Joi.string().required(),
                 url: Joi.string().required(),
@@ -20,11 +23,14 @@ export default {
                 return res.status(400).json({ ok: false, error });
             }
 
-            const song = await Song.create(value);
+            // Guarda la pista y el usuario que la guardo
+            const song = await Song.create(Object.assign({}, value, { usuario: req.currentUser._id }));
+
             return res.status(200).json({ ok: true, song });
 
+
         } catch (error) {
-            return res.status(500).json({ ok: false, error });
+            return res.status(500).json({ ok: false, msg: 'Fallo el guardado', error: error });
         }
 
     },
@@ -36,7 +42,8 @@ export default {
 
             const options = {
                 page: parseInt(page, 10) || 1,
-                limit: parseInt(perPage, 10) || 5
+                limit: parseInt(perPage, 10) || 5,
+                populate: { path: 'usuario', select: 'nombre apellido' }
             }
 
             const songs = await Song.paginate({}, options);
@@ -51,7 +58,7 @@ export default {
         try {
             let { id } = req.params;
 
-            const song = await Song.findById(id);
+            const song = await Song.findById(id).populate('usuario', 'nombre apellido');
 
             if (!song) {
                 return res.status(404).json({ ok: false, mensaje: 'No se encontro la pista' })

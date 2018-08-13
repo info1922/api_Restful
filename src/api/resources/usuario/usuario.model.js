@@ -12,7 +12,7 @@ const userSchema = new Schema({
     apellido: { type: String, required: [true, 'El apellido es necesario'] },
     // email: { type: String, required: [true, 'El correo es necesario'], unique: true },
     // password: { type: String, required: [true, 'La contraseña es necesaria'] },
-    role: { default: 2, required: true, type: Number },
+    role: { default: USER_ROLE, required: true, type: Number },
     google: { email: String, id: String, displayName: String, token: String },
     facebook: { email: String, id: String, displayName: String, token: String }
 

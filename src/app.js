@@ -15,8 +15,8 @@ import User from './api/resources/usuario/usuario.model';
 import { configureFacebookStrategy } from './api/middlewares/passport-facebook';
 
 var options = {
-    key: fs.readFileSync('keys/privatekey.pem'),
-    cert: fs.readFileSync('keys/certificate.pem'),
+    key: fs.readFileSync('keys/key.pem'),
+    cert: fs.readFileSync('keys/cert.pem'),
     requestCert: false,
     rejectUnauthorized: false
 };
