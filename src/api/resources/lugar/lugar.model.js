@@ -6,10 +6,10 @@ const { Schema } = mongoose;
 const lugarSchema = new Schema({
 
     nombre: { type: String, required: [true, 'El nombre es necesario'] },
-    songs: [{
+    materiales: [{
         type: Schema.Types.ObjectId,
-        ref: 'Song',
-        required: true,
+        ref: 'Material',
+        required: false,
     }],
     usuario: {
         type: Schema.Types.ObjectId,

@@ -1,4 +1,4 @@
-# API - Registro de canciones 
+# API - Registro de materiales 
 
 Integra autenticación con redes sociales facebook y google.
 

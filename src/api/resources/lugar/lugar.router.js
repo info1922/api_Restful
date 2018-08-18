@@ -12,3 +12,6 @@ const userPolicy = passport.authenticate('jwt', { session: false });
 lugarListRouter.route('/')
     .post(userPolicy, lugarController.create)
     .get(userPolicy, lugarController.findAll);
+
+lugarListRouter.route('/:id')
+    .put(userPolicy, lugarController.update);

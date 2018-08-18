@@ -1,13 +1,13 @@
 export const devConfig = {
-    secret: 'secret',
+    secret: ' ',
     google: {
-        clientId: 'clientId',
-        clientSecret: 'clientSecret',
-        callbackURL: 'https://localhost:3000/api/auth/google/callback'
+        clientId: ' ',
+        clientSecret: '',
+        callbackURL: ' '
     },
     facebook: {
-        app_id: 'app_id',
-        app_secret: 'app_secret',
-        callbackURL: 'https://localhost:3000/api/auth/facebook/callback'
+        app_id: ' ',
+        app_secret: ' ',
+        callbackURL: ' '
     }
 };
