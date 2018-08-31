@@ -13,6 +13,7 @@
         "bcryptjs": "^2.4.3",
         "body-parser": "^1.18.3",
         "express": "^4.16.3",
+        "express-fileupload": "^0.4.0",
         "express-session": "^1.15.6",
         "joi": "^13.6.0",
         "jsonwebtoken": "^8.3.0",
@@ -22,7 +23,10 @@
         "passport": "^0.4.0",
         "passport-facebook": "^2.1.1",
         "passport-google-oauth": "^1.0.0",
-        "passport-jwt": "^4.0.0"
+        "passport-jwt": "^4.0.0",
+        "pdfkit": "^0.8.3",
+        "pdfmake": "^0.1.37",
+        "voilab-pdf-table": "^0.4.0"
     },
     "devDependencies": {
         "babel-cli": "^6.26.0",

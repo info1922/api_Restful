@@ -5,10 +5,11 @@ const { Schema } = mongoose;
 
 const materialSchema = new Schema({
 
-    title: { type: String, required: [true, 'El titulo es necesario'] },
+    title: { type: String, required: [true, 'El nombre es necesario'] },
     url: { type: String, required: [true, 'La url es necesaria'] },
     asignado: { type: Boolean, required: true, default: false },
-    rating: { type: Number, default: 0, min: 0, max: 5 },
+    cantidad: { type: Number, default: 1, min: 1, max: Infinity, required: true },
+    img: { type: String, required: false },
     usuario: {
         type: Schema.Types.ObjectId,
         ref: 'User',

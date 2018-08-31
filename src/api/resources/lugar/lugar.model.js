@@ -6,6 +6,8 @@ const { Schema } = mongoose;
 const lugarSchema = new Schema({
 
     nombre: { type: String, required: [true, 'El nombre es necesario'] },
+    direccion: { type: String, required: false },
+    img: { type: String, required: false },
     materiales: [{
         type: Schema.Types.ObjectId,
         ref: 'Material',

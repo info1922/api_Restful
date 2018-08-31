@@ -2,8 +2,6 @@ import Joi from 'joi';
 import lugarService from "./lugar.service";
 import lugarModel from "./lugar.model";
 import materialModel from "../material/material.model";
-import { Mongoose } from 'mongoose';
-// import { Mongoose } from 'mongoose';
 
 /* jshint ignore:start */
 export default {

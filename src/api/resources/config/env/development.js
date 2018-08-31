@@ -1,13 +1,13 @@
 export const devConfig = {
-    secret: ' ',
+    secret: 'SMALL_GREAT_GIANT',
     google: {
-        clientId: ' ',
-        clientSecret: '',
-        callbackURL: ' '
+        clientId: '369661120981-u7hlfu81geuqmqldl9jpii79296oqlq5.apps.googleusercontent.com',
+        clientSecret: 'WczO8qMgizmgvX09_c4We8Rg',
+        callbackURL: 'https://localhost:3000/api/auth/google/callback'
     },
     facebook: {
-        app_id: ' ',
-        app_secret: ' ',
-        callbackURL: ' '
+        app_id: '987227271458826',
+        app_secret: '10323d6992e2639e7ea8fb6f349a65b8',
+        callbackURL: 'https://localhost:3000/api/auth/facebook/callback'
     }
 };

@@ -10,6 +10,7 @@ const userSchema = new Schema({
     local: { email: String, password: String },
     nombre: { type: String, required: [true, 'El nombre es necesario'] },
     apellido: { type: String, required: [true, 'El apellido es necesario'] },
+    img: { type: String, required: false },
     // email: { type: String, required: [true, 'El correo es necesario'], unique: true },
     // password: { type: String, required: [true, 'La contraseña es necesaria'] },
     role: { default: USER_ROLE, required: true, type: Number },
