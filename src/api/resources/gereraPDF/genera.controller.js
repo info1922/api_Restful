@@ -1,14 +1,15 @@
 import Material from '../material/material.model';
+import Lugar from '../lugar/lugar.model';
 /* jshint ignore:start */
 
 export default {
     getMateriales(req, res) {
 
-        Material.find({}).exec((err, materiales) => {
+        Material.find({}).populate('lugar').exec((err, materiales) => {
             if (err) {
                 return res.status(400).json({
                     ok: false,
-                    mensaje: 'Error al cargar los materiales'
+                    mensaje: 'Error generando el PDF'
                 });
             }
 
@@ -22,7 +23,12 @@ export default {
             ]);
 
             materiales.map((d) => {
-                datos.push([{ image: `./uploads/materiales/${d.img}`, width: 50, height: 50, }, { text: d.title }, { text: d.cantidad }, { text: JSON.stringify(d.usuario) }]);
+                // buscar coincidencias de id materiales en lugares-> materiales
+                datos.push([{ image: d.img ? `./uploads/materiales/${d.img}` : './assets/no-imagen.png', width: 50, height: 50, },
+                    { text: d.title }, { text: d.cantidad },
+                    { text: d.lugar ? d.lugar.nombre : 'Sin asignar' }
+                    // { text: JSON.stringify(d.usuario) }
+                ]);
             });
 
 
@@ -32,29 +38,12 @@ export default {
             pdfDoc.end();
             pdfDoc.pipe(res);
 
-
-
-            // console.log(titulo);
-
-            // var data = [{
-            //         image: './assets/pdf.png',
-            //         width: 50,
-            //         height: 50,
-            //     },
-            //     { text: titulo },
-            //     'OK?', 'Otra'
-            // ];
-
-
-            // materiales.forEach(element => {
-            //     console.log(element.asignado);
-
-            // });
-
-            return console.log(materiales);
+            // return console.log(materiales);
         });
 
         // return res.status(200).json({ ok: true, mensaje: 'Generando pdf' });
 
     }
+
+
 };

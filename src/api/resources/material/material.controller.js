@@ -143,7 +143,6 @@ export default {
                 url: body.url,
                 asignado: body.asignado,
                 cantidad: body.cantidad,
-                img: body.img,
                 lugar: body.lugar,
                 desvincular: body.desvincular,
                 usuario: req.currentUser._id,
@@ -154,76 +153,153 @@ export default {
             const des = body.desvincular;
             const existLugar = mater.lugar;
 
-            // console.log('Lugar: ', existLugar);
+            const mafind = await Material.findById(id).populate('lugar');
 
-            //Buscamos el material
-            const mafind = await Material.findById(id);
-            // console.log('Material encontrado: ', mafind);
-            // console.log(' Lugar original: ', mafind.lugar);
-            // console.log(' Lugar a actualizar: ', mater.lugar);
-            // console.log('Entrando al if ');
-            // console.log("Asignado", mafind.asignado);
-            if (mafind.asignado === true) {
+            // Suponemos que el campo lugar una vez asignado el material; siempre tendra el id del lugar
+            // al que pertenece
 
 
-                if (mafind.lugar == mater.lugar && mater.desvincular == false) {
-                    console.log('Aplica lugares iguales, desvincular = false');
-                    // Actualiza solo el cuerpo del material
-                    // mater.asignado = true; }}}}
-                    const material = await Material.findByIdAndUpdate(id, mater, { new: true });
-                    return res.status(200).json({ ok: true, material });
-                }
-                // && mater.desvincular === true
-                // console.log(mater.desvincular);
-                if (mater.desvincular == true) {
-                    console.log('Aplica lugares diferentes, desvincular = true');
-                    // Busca el lugar donde se encuentra el material
-                    const lugar = await Lugar.findById({ _id: mafind.lugar });
-                    console.log('Lugar al que pertenece', lugar);
-                    console.log('Id a eliminar: ', mafind._id);
-                    // Elimina la referencia del material en el lugar
-                    const lugE = await Lugar.findByIdAndUpdate({ _id: mafind.lugar }, { $pull: { 'materiales': mafind._id } }, { new: true });
+            // Cuando aun no se asigna un lugar y solo se actualiza
+            if (mater.lugar === undefined) {
+                console.log(mater.title, mater.url);
+                // const mafind = await Material.findById(id).populate('lugar');
+                await Material.findByIdAndUpdate(id, mater, { new: true });
+                const matActual2 = await Material.findByIdAndUpdate(id, { $set: { 'asignado': false, 'desvincular': false }, $unset: { 'lugar': mater.lugar } }, { new: true })
+                    // console.log(mater);
+                return res.status(200).json({ ok: true, matActual2 });
+            }
 
-                    console.log('Lugar Actualizado', lugE);
-                    mater.asignado = false;
+            // NOTA: Supongamos que el lugar a asignar existe en la BD
+            if (mater.lugar !== undefined) {
+                // Buscamos el lugar de mater.lugar en la BD, si existe sigue ->
+                // Validar si el campo material.lugar existe Si es la primera vez que se le asigna a un lugar
+                if (mafind.lugar === undefined) {
+                    const nuevoOrigen = await Lugar.findByIdAndUpdate({ _id: mater.lugar }, { $push: { 'materiales': mafind._id } }, { new: true })
+                    mater.asignado = true;
                     mater.desvincular = false;
-                    // Eliminar la referencia de lugar en material
-                    console.log('Lugar a quitar de material: ', mafind.lugar);
-                    const material = await Material.findByIdAndUpdate(id, { $set: { 'asignado': false, 'desvincular': false }, $unset: { 'lugar': mafind.lugar } }, { new: true });
-                    return res.status(200).json({ ok: true, material, mensaje: 'Desvinculado y listo para actualizar' });
+                    const matActual2 = await Material.findByIdAndUpdate(id, mater, { new: true });
+                    return res.status(200).json({ ok: true, matActual2 })
                 }
 
-                res.status(200).json({ ok: true, mensaje: 'Algo aqui' });
 
-            }
+                // Desvincular del origen lugar y actualización material
+                const viejoOrigen = await Lugar.findByIdAndUpdate({ _id: mafind.lugar._id }, { $pull: { 'materiales': mafind._id } }, { new: true });
+                const matActual1 = await Material.findByIdAndUpdate(id, { $set: { 'asignado': false, 'desvincular': false }, $unset: { 'lugar': mater.lugar } }, { new: true })
 
 
-            if (mafind.asignado === false) {
-                // console.log('Agregando a lugar');
-                // mater.asignado = true;
-                mater.desvincular = false;
-                // Validar si biene un lugar en la petición
-                console.log(mater.lugar);
-                // Revisar que en el front el null no de prblemas
-                if (mater.lugar === undefined || mater.lugar === null) {
-                    console.log('El lugar biene vacio');
-                    mater.asignado = false
-                    const material = await Material.findByIdAndUpdate(id, mater, { new: true });
-                    return res.status(200).json({ mensaje: 'Material', material });
-                }
+                //Vincular al nuevo origen lugar y actualización material
+                // await Lugar.findByIdAndUpdate({ _id: body.lugar }, { $push: { 'materiales': material._id } }, { new: true });
+                const nuevoOrigen = await Lugar.findByIdAndUpdate({ _id: mater.lugar }, { $push: { 'materiales': mafind._id } }, { new: true });
                 mater.asignado = true;
-                const material = await Material.findByIdAndUpdate(id, mater, { new: true });
-                const lug = await Lugar.findByIdAndUpdate({ _id: body.lugar }, { $push: { 'materiales': material._id } }, { new: true });
-                // console.log('Se actualiza lugar: ', lug);
-                return res.status(200).json({ ok: true, material, mensaje: 'Asignación correcta' });
+                mater.desvincular = false;
+                const matActual2 = await Material.findByIdAndUpdate(id, mater, { new: true });
+
+                const lugarExiste = await Lugar.findById({ _id: mater.lugar });
+
+                return res.status(200).json({ ok: true, matActual2 });
 
             }
-
 
         } catch (error) {
             return res.status(500).json({ ok: false, error: { message: 'Error al actualizar el material' }, algo: error });
         }
 
     }
+
+
+    // async update(req, res) {
+
+    //     try {
+
+    //         let id = req.params.id;
+    //         var body = req.body
+    //             //
+    //         let mater = {
+    //             title: body.title,
+    //             url: body.url,
+    //             asignado: body.asignado,
+    //             cantidad: body.cantidad,
+    //             //img: body.img,
+    //             lugar: body.lugar,
+    //             desvincular: body.desvincular,
+    //             usuario: req.currentUser._id,
+    //         };
+    //         //
+    //         const user = req.currentUser._id;
+
+    //         const des = body.desvincular;
+    //         const existLugar = mater.lugar;
+
+    //         // console.log('Lugar: ', existLugar);
+
+    //         //Buscamos el material
+    //         const mafind = await Material.findById(id);
+    //         // console.log('Material encontrado: ', mafind);
+    //         // console.log(' Lugar original: ', mafind.lugar);
+    //         // console.log(' Lugar a actualizar: ', mater.lugar);
+    //         // console.log('Entrando al if ');
+    //         // console.log("Asignado", mafind.asignado);
+    //         if (mafind.asignado === true) {
+
+    //             // NOTA: No actualiza cuando el lugar es el mismo
+    //             if (mafind.lugar == mater.lugar && mater.desvincular == false) {
+    //                 console.log('Aplica lugares iguales, desvincular = false');
+    //                 // Actualiza solo el cuerpo del material
+    //                 // mater.asignado = true; }}}}
+    //                 const material = await Material.findByIdAndUpdate(id, mater, { new: true });
+    //                 return res.status(200).json({ ok: true, material });
+    //             }
+    //             // && mater.desvincular === true
+    //             // console.log(mater.desvincular);
+    //             if (mater.desvincular == true) {
+    //                 console.log('Aplica lugares diferentes, desvincular = true');
+    //                 // Busca el lugar donde se encuentra el material
+    //                 const lugar = await Lugar.findById({ _id: mafind.lugar });
+    //                 console.log('Lugar al que pertenece', lugar);
+    //                 console.log('Id a eliminar: ', mafind._id);
+    //                 // Elimina la referencia del material en el lugar
+    //                 const lugE = await Lugar.findByIdAndUpdate({ _id: mafind.lugar }, { $pull: { 'materiales': mafind._id } }, { new: true });
+
+    //                 console.log('Lugar Actualizado', lugE);
+    //                 mater.asignado = false;
+    //                 mater.desvincular = false;
+    //                 // Eliminar la referencia de lugar en material
+    //                 console.log('Lugar a quitar de material: ', mafind.lugar);
+    //                 const material = await Material.findByIdAndUpdate(id, { $set: { 'asignado': false, 'desvincular': false }, $unset: { 'lugar': mafind.lugar } }, { new: true });
+    //                 return res.status(200).json({ ok: true, material, mensaje: 'Desvinculado y listo para actualizar' });
+    //             }
+
+    //             res.status(200).json({ ok: true, mensaje: 'Actualizado correctamente' });
+
+    //         }
+
+
+    //         if (mafind.asignado === false) {
+    //             // console.log('Agregando a lugar');
+    //             // mater.asignado = true;
+    //             mater.desvincular = false;
+    //             // Validar si biene un lugar en la petición
+    //             console.log(mater.lugar);
+    //             // Revisar que en el front el null no de prblemas
+    //             if (mater.lugar === undefined || mater.lugar === null) {
+    //                 console.log('El lugar biene vacio');
+    //                 mater.asignado = false
+    //                 const material = await Material.findByIdAndUpdate(id, mater, { new: true });
+    //                 return res.status(200).json({ mensaje: 'Material', material });
+    //             }
+    //             mater.asignado = true;
+    //             const material = await Material.findByIdAndUpdate(id, mater, { new: true });
+    //             const lug = await Lugar.findByIdAndUpdate({ _id: body.lugar }, { $push: { 'materiales': material._id } }, { new: true });
+    //             // console.log('Se actualiza lugar: ', lug);
+    //             return res.status(200).json({ ok: true, material, mensaje: 'Asignación correcta' });
+
+    //         }
+
+
+    //     } catch (error) {
+    //         return res.status(500).json({ ok: false, error: { message: 'Error al actualizar el material' }, algo: error });
+    //     }
+
+    // }
 
 }

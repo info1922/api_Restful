@@ -15,6 +15,9 @@ export default {
 
             const lugarlist = await lugarModel.create(Object.assign({}, value, { usuario: req.currentUser._id }));
 
+            /**
+             * TODO: No asignara materiales cuando se cree un nuevo lugar
+             */
 
             return res.status(200).json({ ok: true, lugarlist });
 
@@ -34,79 +37,147 @@ export default {
         }
     },
 
-    async update(req, res) {
-        try {
 
+    async update(req, res) {
+
+        try {
             let id = req.params.id;
-            var body = req.body;
+            let body = req.body;
             const user = req.currentUser._id;
 
-            let lug = {
+            let lug1 = {
                 nombre: body.nombre,
-                materiales: body.materiales,
-                usuario: req.currentUser._id
-            };
+                usuario: req.currentUser._id,
+            }
+
 
             const mat = body.materiales;
+            // console.log('Lugares para agregar: ', mat.length);
 
-            // Obtenemos los materiales que se van a agregar al lugar con valor false
+
             const mater = await materialModel.find({ _id: mat }).where('asignado', false);
-            console.log('Encontrado: ', mater);
-            // let asignado = true;
+            // console.log('Lugares encontrados: ', mater);
 
-            // Guardamos el material en el lugar
-            const lugar = await lugarModel.findOneAndUpdate(id, lug, { new: true }).populate('materiales');
-            // Actualiza el material a true - Guardado aquí
-            console.log(lugar);
 
-            return res.status(200).json({ ok: true, mensaje: 'Lugar actualizado', lugar });
+            if (mater.length <= 0) {
+
+                // console.log('Id del delugar: ', req.params.id);
+                console.log('No hay materiales');
+                const lugar = await lugarModel.findOneAndUpdate({ _id: req.params.id }, lug1, { new: true });
+                console.log(lugar);
+                return res.status(200).json({ ok: true, mensaje: 'Lugar actualizado m=0', lugar });
+
+            } else {
+
+                // console.log('Hay mas de un material');
+
+                // Guardamos los materiales en la objeto y guardamos en la BD
+                const lugar = await lugarModel.findOneAndUpdate(id, { $set: { 'nombre': req.body.nombre }, $push: { 'materiales': req.body.materiales } }, { new: true }).populate('materiales');
+
+                // console.log('Lugar actualizado: ', lugar);
+
+                // Actualizamos los materiales con asignado = true
+
+                mater.map((d) => {
+
+                    // Revisar por que remplaza el valor anterior por el nuevo
+                    materialModel.findById(d._id).exec((err, material) => {
+                        if (err) {
+                            throw 'Error al actualizar material';
+                        }
+                        if (!material) {
+                            throw 'No hay materiales en el arreglo';
+                        }
+                        console.log('Materiales agregados: ', material);
+
+                        if (material.asignado === false) {
+                            material.asignado = true;
+                            material.lugar = req.params.id;
+                            material.usuario = req.currentUser._id;
+
+                            material.save((err, materialUpdate) => {
+                                if (err) {
+                                    throw err;
+                                }
+                                console.log('Materiales actalizados: ', materialUpdate);
+                            });
+                        } else {
+                            console.log('Este material ya esta asignado', material.title);
+                        }
+
+                    });
+                });
+
+                return res.status(200).json({ mensaje: 'Lugar actualizado m>0', lugar });
+
+            }
 
         } catch (error) {
             return res.status(500).json({ error: { message: 'Error al actualiza el lugar' }, algo: error });
         }
+
+    },
+
+    async delete(req, res) {
+        try {
+            let id = req.params.id;
+
+            const lugar = await lugarModel.find({ _id: id });
+
+            let vacio;
+
+            console.log('Lugar a buscar: ', lugar);
+
+            const lug = await lugarModel.findById({ _id: id });
+            if (!lugar) {
+                return res.status(400).json({ ok: false, mensaje: 'Lugar no encontrado' });
+            }
+            if (lugar === null) {
+                return res.status(400).json({ ok: false, mensaje: 'Lugar no encontrado' });
+            }
+
+            // Tiene materiales en el arreglo ?? 
+            lugar.map((d) => {
+                vacio = d.materiales;
+            });
+
+            if (vacio.length === 0) {
+                console.log('No tiene materiales');
+                lug.remove();
+                return res.status(200).json({ ok: true, mensaje: 'Lugar eliminado', lugar });
+            } else {
+                console.log('Contiene materiales', vacio.length);
+                let mbuscar
+                    // Recorremos el arreglo del lugar
+                lugar.map((m) => {
+                    mbuscar = m.materiales;
+                    console.log(mbuscar);
+                    // Recorremos el arreglo de materiales de un lugar
+                    mbuscar.map((b) => {
+                        // Buscamos los materiales dentro del arreglo
+                        materialModel.findByIdAndUpdate({ _id: b }, { $set: { 'asignado': false, 'desvincular': false }, $unset: { 'lugar': lugar } }).exec((err, material) => {
+                            if (err) {
+                                return 'Error';
+                            }
+                            if (!material) {
+                                throw 'Materiales nulos';
+                            }
+
+                        });
+                        console.log(b);
+                    });
+
+                });
+            }
+
+            lug.remove();
+
+            return res.status(200).json({ ok: true, mensaje: 'Lugar eliminado', lugar });
+
+
+        } catch (error) {
+            return res.status(500).json({ ok: false, mensaje: 'Error en la petición' });
+        }
     }
+
 }
-
-
-
-
-// Update 
-//     async update(req, res) {
-//         try {
-
-//             let id = req.params.id;
-//             var body = req.body;
-//             const user = req.currentUser._id;
-
-//             let lug = {
-//                 nombre: body.nombre,
-//                 materiales: body.materiales,
-//                 usuario: req.currentUser._id
-//             };
-
-//             const mat = body.materiales;
-
-//             // buscar los materiales que se van a agregar al lugar solo si asignado = false
-//             await materialModel.find({ _id: mat }, { asignado: 'false' }, (err, guardado) => {
-//                     // actualiza solo si asignado = false 
-//                     // y guardamos la referencia del material en el lugar
-//                     await lugarModel.findByIdAndUpdate(id, lug, { new: true });
-//             });
-
-//             // actualizamos el material para que no se pueda agregar despues
-
-
-//             console.log('Encontrado: ', mater);
-//             // let asignado = true;
-
-//             // Guardamos el material en el lugar
-//             const lugar = await lugarModel.findByIdAndUpdate(id, lug, { new: true });
-//             // Actualiza el material a true - Guardado aquí
-
-//             return res.status(200).json({ ok: true, mensaje: 'Lugar actualizado', lugar });
-
-//         } catch (error) {
-//             return res.status(500).json({ error: { message: 'Error al actualiza el lugar' }, algo: error });
-//         }
-//     }
-// }

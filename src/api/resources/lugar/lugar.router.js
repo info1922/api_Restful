@@ -14,4 +14,6 @@ lugarListRouter.route('/')
     .get(userPolicy, lugarController.findAll);
 
 lugarListRouter.route('/:id')
-    .put(userPolicy, lugarController.update);
+    .put(userPolicy, lugarController.update)
+    .delete(userPolicy, lugarController.delete);
+// .put(lugarController.update);
