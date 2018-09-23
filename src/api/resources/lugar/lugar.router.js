@@ -10,10 +10,10 @@ const adminPolicy = [passport.authenticate('jwt', { session: false }), isAdmin];
 const userPolicy = passport.authenticate('jwt', { session: false });
 
 lugarListRouter.route('/')
-    .post(userPolicy, lugarController.create)
-    .get(userPolicy, lugarController.findAll);
+    .post(adminPolicy, lugarController.create)
+    .get(adminPolicy, lugarController.findAll);
 
 lugarListRouter.route('/:id')
-    .put(userPolicy, lugarController.update)
-    .delete(userPolicy, lugarController.delete);
+    .put(adminPolicy, lugarController.update)
+    .delete(adminPolicy, lugarController.delete);
 // .put(lugarController.update);

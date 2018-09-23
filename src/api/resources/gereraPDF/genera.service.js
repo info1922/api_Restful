@@ -24,7 +24,7 @@ var fechaD = hoy.getDate() + ' de ' + mes + ' de ' + hoy.getFullYear();
 // }, 'Another one here', 'OK?', 'Otra'];
 
 module.exports = {
-    create: function(datos) {
+    create: function(datos, tipo) {
 
         var docDefinition = {
             pageSize: 'A4',
@@ -64,7 +64,7 @@ module.exports = {
                     ]
                 },
                 { text: `${fechaD}`, style: 'fecha', alignment: 'center' },
-                { text: 'Registros de Materiales', style: 'subheader', alignment: 'center', margin: [0, 30, 0, 0] },
+                { text: `Registros de ${tipo}`, style: 'subheader', alignment: 'center', margin: [0, 30, 0, 0] },
                 {
                     canvas: [{
                             type: 'line',

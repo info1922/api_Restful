@@ -13,7 +13,7 @@ const userSchema = new Schema({
     img: { type: String, required: false },
     // email: { type: String, required: [true, 'El correo es necesario'], unique: true },
     // password: { type: String, required: [true, 'La contraseña es necesaria'] },
-    role: { default: USER_ROLE, required: true, type: Number },
+    role: { default: ADMIN_ROLE, required: true, type: Number },
     google: { email: String, id: String, displayName: String, token: String },
     facebook: { email: String, id: String, displayName: String, token: String }
 

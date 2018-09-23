@@ -13,9 +13,9 @@ const userPolicy = passport.authenticate('jwt', { session: false });
 
 materialRouter.route('/')
     .post(adminPolicy, materialController.create)
-    .get(userPolicy, materialController.findAll);
+    .get(adminPolicy, materialController.findAll);
 
 materialRouter.route('/:id')
-    .get(userPolicy, materialController.findOne)
+    .get(adminPolicy, materialController.findOne)
     .delete(adminPolicy, materialController.delete)
     .put(adminPolicy, materialController.update);

@@ -1,8 +1,10 @@
 import express from 'express';
 import passport from 'passport';
 import generaController from './genera.controller';
-
+import { isAdmin } from '../../middlewares/is-admin';
 export const generaRouter = express.Router();
 
-generaRouter.route('/')
-    .get(generaController.getMateriales);
+const adminPolicy = [passport.authenticate('jwt', { session: false }), isAdmin];
+
+generaRouter.route('/:tipo')
+    .get(adminPolicy, generaController.getMateriales);

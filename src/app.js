@@ -14,12 +14,12 @@ import { devConfig } from './api/resources/config/env/development';
 import User from './api/resources/usuario/usuario.model';
 import { configureFacebookStrategy } from './api/middlewares/passport-facebook';
 
-var options = {
-    key: fs.readFileSync('keys/key.pem'),
-    cert: fs.readFileSync('keys/cert.pem'),
-    requestCert: false,
-    rejectUnauthorized: false
-};
+// var options = {
+//     key: fs.readFileSync('keys/key.pem'),
+//     cert: fs.readFileSync('keys/cert.pem'),
+//     requestCert: false,
+//     rejectUnauthorized: false
+// };
 
 
 const app = express();
@@ -97,8 +97,8 @@ app.get('/', function(req, res) {
 //         },
 //     });
 // });
-var server = https.createServer(options, app);
+// var server = https.createServer(options, app);
 
-server.listen(PORT, () => {
+app.listen(PORT, () => {
     console.log('Escuchando: ', PORT);
 });
