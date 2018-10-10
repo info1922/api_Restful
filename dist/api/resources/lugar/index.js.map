@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../../../src/api/resources/lugar/index.js"],"names":["lugarListRouter"],"mappings":";;;;;;;;;;;kBAASA,e","file":"index.js","sourcesContent":["export { lugarListRouter }\r\nfrom './lugar.router';"]}

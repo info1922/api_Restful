@@ -9,4 +9,4 @@ export const imagenRouter = express.Router();
 const adminPolicy = [passport.authenticate('jwt', { session: false }), isAdmin];
 
 imagenRouter.route('/:tipo/:id')
-    .get(fileUpload(), adminPolicy, imagenController.getAll);
+    .get(fileUpload(), imagenController.getAll);

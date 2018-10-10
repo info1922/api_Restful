@@ -4,7 +4,8 @@ export default {
     validateBody(body) {
         const schema = Joi.object().keys({
             materiales: Joi.array().items().required(),
-            nombre: Joi.string().required()
+            nombre: Joi.string().required(),
+            direccion: Joi.string()
         });
 
         const { value, error } = Joi.validate(body, schema);

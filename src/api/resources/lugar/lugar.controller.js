@@ -37,6 +37,28 @@ export default {
         }
     },
 
+    async findOne(req, res) {
+
+        try {
+            let { id } = req.params;
+
+            const lugar = await lugarModel.findById(id)
+                .populate('usuario')
+                .populate('materiales');
+
+            if (!lugar) {
+                return res.status(404).json({ ok: false, mensaje: 'No se encontro el lugar' })
+            }
+
+            return res.status(200).json({ ok: true, lugar });
+
+        } catch (error) {
+            return res.status(500).json({ ok: false, error });
+        }
+
+
+    },
+
 
     async update(req, res) {
 

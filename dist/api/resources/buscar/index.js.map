@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../../../src/api/resources/buscar/index.js"],"names":["buscarListRouter","buscarTodoRouter"],"mappings":";;;;;;;;;;;mBAASA,gB;;;;;;mBAAkBC,gB","file":"index.js","sourcesContent":["export { buscarListRouter, buscarTodoRouter }\r\nfrom './buscar.router';"]}

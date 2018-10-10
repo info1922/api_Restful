@@ -3,6 +3,8 @@ import https from 'https';
 var fs = require('fs');
 
 const logger = require('morgan');
+import cors from 'cors';
+
 import passport from 'passport';
 import session from 'express-session';
 import { connect } from "./api/resources/config/db";
@@ -36,6 +38,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 // parse application/json
 app.use(bodyParser.json());
+
+app.use(cors());
 
 app.use(session({
     secret: devConfig.secret,

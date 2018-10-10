@@ -1,4 +1,9 @@
-export const devConfig = {
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+var devConfig = exports.devConfig = {
     secret: 'SMALL_GREAT_GIANT',
     frontendURL: 'http://localhost:4200',
     google: {
@@ -12,3 +17,4 @@ export const devConfig = {
         callbackURL: 'https://localhost:3000/api/auth/facebook/callback'
     }
 };
+//# sourceMappingURL=development.js.map

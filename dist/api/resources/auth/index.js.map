@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../../../src/api/resources/auth/index.js"],"names":["authRouter"],"mappings":";;;;;;;;;;;iBAASA,U","file":"index.js","sourcesContent":["export { authRouter }\r\nfrom './auth.router';"]}

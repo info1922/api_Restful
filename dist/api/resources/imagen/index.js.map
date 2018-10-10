@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../../../src/api/resources/imagen/index.js"],"names":["imagenRouter"],"mappings":";;;;;;;;;;;mBAASA,Y","file":"index.js","sourcesContent":["export { imagenRouter }\r\nfrom './imagen.router';"]}

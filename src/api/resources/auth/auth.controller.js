@@ -7,5 +7,6 @@ export default {
         const token = jwt.sign({ id: req.currentUser.id }, devConfig.secret, { expiresIn: '1d' });
 
         return res.json({ ok: true, token }); // Jwt token
+        // res.redirect(`${devConfig.frontendURL}/panel/?token=${token}`);
     }
 };

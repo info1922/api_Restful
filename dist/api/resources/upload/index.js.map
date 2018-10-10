@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../../../src/api/resources/upload/index.js"],"names":["uploadRouter"],"mappings":";;;;;;;;;;;mBAASA,Y","file":"index.js","sourcesContent":["export { uploadRouter }\r\nfrom './imagen.router';"]}
