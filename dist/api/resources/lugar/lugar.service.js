@@ -13,7 +13,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.default = {
     validateBody: function validateBody(body) {
         var schema = _joi2.default.object().keys({
-            materiales: _joi2.default.array().items().required(),
+            materiales: _joi2.default.array().items(),
             nombre: _joi2.default.string().required(),
             direccion: _joi2.default.string()
         });

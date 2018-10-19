@@ -38,7 +38,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.default = {
     create: function () {
         var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(req, res) {
-            var _lugarService$validat, value, error, lugarlist;
+            var _lugarService$validat, value, error, lugar;
 
             return _regenerator2.default.wrap(function _callee$(_context) {
                 while (1) {
@@ -59,8 +59,8 @@ exports.default = {
                             return _lugar5.default.create((0, _assign2.default)({}, value, { usuario: req.currentUser._id }));
 
                         case 6:
-                            lugarlist = _context.sent;
-                            return _context.abrupt("return", res.status(200).json({ ok: true, lugarlist: lugarlist }));
+                            lugar = _context.sent;
+                            return _context.abrupt("return", res.status(200).json({ ok: true, lugar: lugar }));
 
                         case 10:
                             _context.prev = 10;

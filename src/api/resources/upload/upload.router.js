@@ -10,4 +10,4 @@ export const uploadRouter = express.Router();
 const adminPolicy = [passport.authenticate('jwt', { session: false }), isAdmin];
 
 uploadRouter.route('/:tipo/:id')
-    .put(fileUpload(), adminPolicy, uploadController.update);
+    .put(fileUpload(), uploadController.update);

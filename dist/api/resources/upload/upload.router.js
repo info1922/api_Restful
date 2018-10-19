@@ -27,5 +27,5 @@ var uploadRouter = exports.uploadRouter = _express2.default.Router();
 
 var adminPolicy = [_passport2.default.authenticate('jwt', { session: false }), _isAdmin.isAdmin];
 
-uploadRouter.route('/:tipo/:id').put(fileUpload(), adminPolicy, _upload2.default.update);
+uploadRouter.route('/:tipo/:id').put(fileUpload(), _upload2.default.update);
 //# sourceMappingURL=upload.router.js.map

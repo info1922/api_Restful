@@ -13,13 +13,13 @@ export default {
                 return res.status(500).json({ error })
             }
 
-            const lugarlist = await lugarModel.create(Object.assign({}, value, { usuario: req.currentUser._id }));
+            const lugar = await lugarModel.create(Object.assign({}, value, { usuario: req.currentUser._id }));
 
             /**
              * TODO: No asignara materiales cuando se cree un nuevo lugar
              */
 
-            return res.status(200).json({ ok: true, lugarlist });
+            return res.status(200).json({ ok: true, lugar });
 
         } catch (error) {
             return res.status(500).json({ error });
