@@ -3,6 +3,8 @@ import lugarService from "./lugar.service";
 import lugarModel from "./lugar.model";
 import materialModel from "../material/material.model";
 
+var fs = require('fs');
+
 /* jshint ignore:start */
 export default {
 
@@ -165,6 +167,14 @@ export default {
 
             if (vacio.length === 0) {
                 console.log('No tiene materiales');
+                if (lug.img) {
+                    // console.log('Tiene una imagen ---------');
+                    const pathViejo = './uploads/lugares/' + lug.img;
+                    // console.log('Dirección del archivo antes de eliminar lugar', pathViejo);
+                    fs.unlinkSync(pathViejo);
+                    // console.log('Se elimino la imagen');
+                }
+
                 lug.remove();
                 return res.status(200).json({ ok: true, mensaje: 'Lugar eliminado', lugar });
             } else {

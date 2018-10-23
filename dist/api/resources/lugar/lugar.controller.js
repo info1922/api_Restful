@@ -34,6 +34,8 @@ var _material2 = _interopRequireDefault(_material);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var fs = require('fs');
+
 /* jshint ignore:start */
 exports.default = {
     create: function () {
@@ -269,7 +271,7 @@ exports.default = {
     }(),
     delete: function () {
         var _ref5 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee5(req, res) {
-            var id, lugar, vacio, lug, mbuscar;
+            var id, lugar, vacio, lug, pathViejo, mbuscar;
             return _regenerator2.default.wrap(function _callee5$(_context5) {
                 while (1) {
                     switch (_context5.prev = _context5.next) {
@@ -315,15 +317,24 @@ exports.default = {
                             });
 
                             if (!(vacio.length === 0)) {
-                                _context5.next = 21;
+                                _context5.next = 22;
                                 break;
                             }
 
                             console.log('No tiene materiales');
+                            if (lug.img) {
+                                // console.log('Tiene una imagen ---------');
+                                pathViejo = './uploads/lugares/' + lug.img;
+                                // console.log('Dirección del archivo antes de eliminar lugar', pathViejo);
+
+                                fs.unlinkSync(pathViejo);
+                                // console.log('Se elimino la imagen');
+                            }
+
                             lug.remove();
                             return _context5.abrupt("return", res.status(200).json({ ok: true, mensaje: 'Lugar eliminado', lugar: lugar }));
 
-                        case 21:
+                        case 22:
                             console.log('Contiene materiales', vacio.length);
                             mbuscar = void 0;
                             // Recorremos el arreglo del lugar
@@ -346,23 +357,23 @@ exports.default = {
                                 });
                             });
 
-                        case 24:
+                        case 25:
 
                             lug.remove();
 
                             return _context5.abrupt("return", res.status(200).json({ ok: true, mensaje: 'Lugar eliminado', lugar: lugar }));
 
-                        case 28:
-                            _context5.prev = 28;
+                        case 29:
+                            _context5.prev = 29;
                             _context5.t0 = _context5["catch"](0);
                             return _context5.abrupt("return", res.status(500).json({ ok: false, mensaje: 'Error en la petición' }));
 
-                        case 31:
+                        case 32:
                         case "end":
                             return _context5.stop();
                     }
                 }
-            }, _callee5, this, [[0, 28]]);
+            }, _callee5, this, [[0, 29]]);
         }));
 
         function _delete(_x9, _x10) {
