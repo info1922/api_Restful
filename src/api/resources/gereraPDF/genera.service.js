@@ -133,7 +133,7 @@ module.exports = {
 
         const fecha = Date.now();
         // const mil = fecha.
-        const fileName = `materiales-${fecha}.pdf`;
+        // const fileName = `materiales-${fecha}.pdf`;
         // const writeStream = fs.createWriteStream(fileName);
         const pdfDoc = printer.createPdfKitDocument(docDefinition);
 

@@ -7,4 +7,4 @@ export const generaRouter = express.Router();
 const adminPolicy = [passport.authenticate('jwt', { session: false }), isAdmin];
 
 generaRouter.route('/:tipo')
-    .get(adminPolicy, generaController.getMateriales);
+    .get(generaController.getMateriales);

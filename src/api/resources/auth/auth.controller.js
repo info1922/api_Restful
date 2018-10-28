@@ -20,7 +20,7 @@ export default {
     },
 
     renuevaToken(req, res) {
-        const token = jwt.sign({ id: req.currentUser }, devConfig.secret, { expiresIn: '5d' });
+        const token = jwt.sign({ id: req.currentUser }, devConfig.secret, { expiresIn: expires });
         res.status(200).json({
             ok: true,
             token: token

@@ -11,43 +11,52 @@ export default {
         if (tipo === 'materiales') {
             console.log('materiales');
             Material.find({}).populate('lugar').exec((err, materiales) => {
-                if (err) {
-                    return res.status(400).json({
-                        ok: false,
-                        mensaje: 'Error generando el PDF'
-                    });
-                }
+                // if (err) {
+                //     return res.status(400).json({
+                //         ok: false,
+                //         mensaje: 'Error generando el PDF'
+                //     });
+                // }
+
+                // console.log(materiales);
 
                 var datos = [];
 
-                console.log(materiales);
-                datos.push([{ text: 'Imagen', bold: true, fontSize: 12 },
+                // console.log('materiales en BD: ', materiales);
+                datos.push([
+                    { text: 'Imagen', bold: true, fontSize: 12 },
                     { text: 'Nombre', bold: true, fontSize: 12 },
                     { text: 'Cantidad', bold: true, fontSize: 12 },
                     { text: 'Lugar', bold: true, fontSize: 12 }
                 ]);
 
+                // console.log('Arrglo de datos: ', datos);
+                // console.log(materiales);
                 materiales.map((d) => {
+                    // console.log('Map de materiales: ', d);
                     // buscar coincidencias de id materiales en lugares-> materiales
-                    datos.push([{ image: d.img ? `./uploads/materiales/${d.img}` : './assets/no-imagen.png', width: 50, height: 50, },
-                        { text: d.title }, { text: d.cantidad },
+                    datos.push([
+                        { image: d.img ? `./uploads/materiales/${d.img}` : './assets/no-imagen.png', width: 50, height: 50 },
+                        { text: d.title },
+                        { text: d.cantidad },
                         { text: d.lugar ? d.lugar.nombre : 'Sin asignar' }
                         // { text: JSON.stringify(d.usuario) }
                     ]);
                 });
 
 
-                console.log(datos);
+                console.log('Los datos materiales: ', datos);
 
 
                 var pdfDoc = require('./genera.service').create(datos, tipo);
                 pdfDoc.end();
                 pdfDoc.pipe(res);
-
+                // pdfDoc.end();
+                // pdfDoc.pipe(res);
+                // res.status(200);
                 // return console.log(materiales);
             });
-        }
-        if (tipo === 'lugares') {
+        } else if (tipo === 'lugares') {
             console.log('lugares');
             Lugar.find({}).populate('materiales').exec((err, lugares) => {
                 if (err) {
@@ -83,10 +92,13 @@ export default {
                         }
                         // { text: JSON.stringify(d.usuario) }
                     ]);
+
+
+
                 });
 
 
-                console.log(datos);
+                console.log('Los datos: lugares ', datos);
 
 
                 var pdfDoc = require('./genera.service').create(datos, tipo);
@@ -96,7 +108,7 @@ export default {
                 // return console.log(materiales);
             });
         } else {
-            console.log('Colección incorrecta');
+            // console.log('Colección incorrecta');
             return res.status(400).json({ ok: false, mensaje: 'Colección incorrecta' });
         }
 
