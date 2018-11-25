@@ -15,6 +15,9 @@ materialRouter.route('/')
     .post(adminPolicy, materialController.create)
     .get(adminPolicy, materialController.findAll);
 
+materialRouter.route('/bienvenido')
+    .get(adminPolicy, materialController.bienvenida);
+
 materialRouter.route('/:id')
     .get(adminPolicy, materialController.findOne)
     .delete(adminPolicy, materialController.delete)

@@ -31,19 +31,19 @@ export default {
             if (existLugar === undefined) {
                 // console.log('Esta vacio');
                 material.asignado = false;
-                const mater = await material.save();
+                const matActual2 = await material.save();
 
                 // console.log('Vacio: ', mater);
-                return res.status(200).json({ ok: true, mater });
+                return res.status(200).json({ ok: true, matActual2 });
             } else {
                 // console.log('Tiene dato');
                 material.asignado = true;
-                const mater = await material.save();
+                const matActual2 = await material.save();
                 // console.log('lleno: ', mater);
                 // console.log('Id nuevo material: ', mater._id)
-                const lug = await Lugar.findByIdAndUpdate({ _id: body.lugar }, { $push: { 'materiales': mater._id } }, { new: true });
+                const lug = await Lugar.findByIdAndUpdate({ _id: body.lugar }, { $push: { 'materiales': matActual2._id } }, { new: true });
                 // console.log('Lugar : ', lug);
-                return res.status(200).json({ ok: true, mater });
+                return res.status(200).json({ ok: true, matActual2 });
             }
 
             // const mater = await material.save();
@@ -57,6 +57,17 @@ export default {
 
     },
 
+    async bienvenida(req, res) {
+        try {
+            return res.status(200).json({ok: true, mensaje: 'Bienvenido'});
+        } catch (error) {
+            return res.status(500).json({
+                ok: false,
+                error
+            });
+        }
+    },
+
     async findAll(req, res) {
         try {
 
@@ -68,8 +79,10 @@ export default {
                 populate: { path: 'usuario', select: 'nombre apellido' }
             }
 
-            const materiales = await Material.paginate({}, options);
-            return res.status(200).json(materiales);
+            const materiales = await Material.find()
+                .populate('lugar','nombre')
+                .populate('usuario', 'nombre apellido');
+            return res.status(200).json({ok: true, materiales});
         } catch (error) {
             return res.status(500).json({ ok: false, error });
         }
