@@ -25,5 +25,5 @@ var generaRouter = exports.generaRouter = _express2.default.Router();
 
 var adminPolicy = [_passport2.default.authenticate('jwt', { session: false }), _isAdmin.isAdmin];
 
-generaRouter.route('/:tipo').get(adminPolicy, _genera2.default.getMateriales);
+generaRouter.route('/:tipo').get(_genera2.default.getMateriales);
 //# sourceMappingURL=genera.router.js.map

@@ -45,7 +45,7 @@ export default {
                 });
 
 
-                console.log('Los datos materiales: ', datos);
+                // console.log('Los datos materiales: ', datos);
 
 
                 var pdfDoc = require('./genera.service').create(datos, tipo);
@@ -68,7 +68,7 @@ export default {
 
                 var datos = [];
 
-                console.log(lugares);
+                // console.log(lugares);
                 datos.push([{ text: 'Imagen', bold: true, fontSize: 12 },
                     { text: 'Nombre', bold: true, fontSize: 12 },
                     { text: 'Dirección', bold: true, fontSize: 12 },
@@ -80,9 +80,9 @@ export default {
                     materiales.map((m) => {
                         let nombreMateriales = [];
                         nombreMateriales.push(m.title);
-                        console.log(nombreMateriales);
+                        // console.log(nombreMateriales);
                     });
-                    console.log('materiales : ', materiales);
+                    // console.log('materiales : ', materiales);
                     // buscar coincidencias de id materiales en lugares-> materiales
                     datos.push([{ image: d.img ? `./uploads/lugares/${d.img}` : './assets/no-imagen.png', width: 50, height: 50, },
                         { text: d.nombre }, { text: d.direccion ? d.direccion : 'Sin dirección' },
@@ -98,7 +98,7 @@ export default {
                 });
 
 
-                console.log('Los datos: lugares ', datos);
+                // console.log('Los datos: lugares ', datos);
 
 
                 var pdfDoc = require('./genera.service').create(datos, tipo);

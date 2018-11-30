@@ -37,8 +37,9 @@ module.exports = {
 
         var docDefinition = {
             pageSize: 'A4',
+            pageMargins: [40, 40, 40, 60],
             footer: function footer(currentPage, pageCount) {
-                return [{ text: 'Pag. ' + currentPage.toString() + ' de ' + pageCount, alignment: 'right', margin: [0, 0, 30, 0], style: 'page' }];
+                return [{ text: 'Pag. ' + currentPage.toString() + ' de ' + pageCount, alignment: 'right', style: 'page' }];
             },
             // header: function(currentPage, pageCount, pageSize) {
             //     // you can apply any logic and return any valid pdfmake element
@@ -66,7 +67,7 @@ module.exports = {
                     image: './assets/escudo2.png'
 
                 }]
-            }, { text: '' + fechaD, style: 'fecha', alignment: 'center' }, { text: 'Registros de ' + tipo, style: 'subheader', alignment: 'center', margin: [0, 30, 0, 0] }, {
+            }, { text: '' + fechaD, style: 'fecha', alignment: 'center' }, { text: 'Registros de ' + tipo, style: 'subheader', alignment: 'center', margin: [0, 30, 0, 40] }, {
                 canvas: [{
                     type: 'line',
                     x1: 40,
@@ -96,7 +97,7 @@ module.exports = {
                 header: {
                     fontSize: 14,
                     bold: true,
-                    margin: [40, 10, 40, 20]
+                    margin: [40, 20, 40, 20]
                 },
                 subheader: {
                     fontSize: 11,
@@ -105,8 +106,8 @@ module.exports = {
                 },
                 fecha: {
                     fontSize: 10,
-                    bold: false
-
+                    bold: false,
+                    margin: [0, 10, 0, 5]
                 },
                 tableExample: {
                     margin: [0, 30, 0, 15]
@@ -117,8 +118,10 @@ module.exports = {
                     color: 'black'
                 },
                 page: {
+                    // heights: 70,
                     fontSize: 9,
-                    bold: false
+                    bold: false,
+                    margin: [0, 0, 30, 0]
                 }
             }
 
@@ -126,7 +129,7 @@ module.exports = {
 
         var fecha = Date.now();
         // const mil = fecha.
-        var fileName = 'materiales-' + fecha + '.pdf';
+        // const fileName = `materiales-${fecha}.pdf`;
         // const writeStream = fs.createWriteStream(fileName);
         var pdfDoc = printer.createPdfKitDocument(docDefinition);
 

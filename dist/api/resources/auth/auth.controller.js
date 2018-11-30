@@ -28,7 +28,7 @@ exports.default = {
         return res.send(true);
     },
     renuevaToken: function renuevaToken(req, res) {
-        var token = _jsonwebtoken2.default.sign({ id: req.currentUser }, _development.devConfig.secret, { expiresIn: '5d' });
+        var token = _jsonwebtoken2.default.sign({ id: req.currentUser }, _development.devConfig.secret, { expiresIn: expires });
         res.status(200).json({
             ok: true,
             token: token

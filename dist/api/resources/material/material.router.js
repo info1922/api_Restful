@@ -31,5 +31,7 @@ var userPolicy = _passport2.default.authenticate('jwt', { session: false });
 
 materialRouter.route('/').post(adminPolicy, _material2.default.create).get(adminPolicy, _material2.default.findAll);
 
+materialRouter.route('/bienvenido').get(adminPolicy, _material2.default.bienvenida);
+
 materialRouter.route('/:id').get(adminPolicy, _material2.default.findOne).delete(adminPolicy, _material2.default.delete).put(adminPolicy, _material2.default.update);
 //# sourceMappingURL=material.router.js.map

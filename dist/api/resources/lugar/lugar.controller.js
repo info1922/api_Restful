@@ -175,6 +175,7 @@ exports.default = {
                             user = req.currentUser._id;
                             lug1 = {
                                 nombre: body.nombre,
+                                direccion: body.direccion,
                                 usuario: req.currentUser._id
                             };
                             mat = body.materiales;

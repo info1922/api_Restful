@@ -25,35 +25,42 @@ exports.default = {
         if (tipo === 'materiales') {
             console.log('materiales');
             _material2.default.find({}).populate('lugar').exec(function (err, materiales) {
-                if (err) {
-                    return res.status(400).json({
-                        ok: false,
-                        mensaje: 'Error generando el PDF'
-                    });
-                }
+                // if (err) {
+                //     return res.status(400).json({
+                //         ok: false,
+                //         mensaje: 'Error generando el PDF'
+                //     });
+                // }
+
+                // console.log(materiales);
 
                 var datos = [];
 
-                console.log(materiales);
+                // console.log('materiales en BD: ', materiales);
                 datos.push([{ text: 'Imagen', bold: true, fontSize: 12 }, { text: 'Nombre', bold: true, fontSize: 12 }, { text: 'Cantidad', bold: true, fontSize: 12 }, { text: 'Lugar', bold: true, fontSize: 12 }]);
 
+                // console.log('Arrglo de datos: ', datos);
+                // console.log(materiales);
                 materiales.map(function (d) {
+                    // console.log('Map de materiales: ', d);
                     // buscar coincidencias de id materiales en lugares-> materiales
                     datos.push([{ image: d.img ? './uploads/materiales/' + d.img : './assets/no-imagen.png', width: 50, height: 50 }, { text: d.title }, { text: d.cantidad }, { text: d.lugar ? d.lugar.nombre : 'Sin asignar'
                         // { text: JSON.stringify(d.usuario) }
                     }]);
                 });
 
-                console.log(datos);
+                // console.log('Los datos materiales: ', datos);
+
 
                 var pdfDoc = require('./genera.service').create(datos, tipo);
                 pdfDoc.end();
                 pdfDoc.pipe(res);
-
+                // pdfDoc.end();
+                // pdfDoc.pipe(res);
+                // res.status(200);
                 // return console.log(materiales);
             });
-        }
-        if (tipo === 'lugares') {
+        } else if (tipo === 'lugares') {
             console.log('lugares');
             _lugar2.default.find({}).populate('materiales').exec(function (err, lugares) {
                 if (err) {
@@ -65,7 +72,7 @@ exports.default = {
 
                 var datos = [];
 
-                console.log(lugares);
+                // console.log(lugares);
                 datos.push([{ text: 'Imagen', bold: true, fontSize: 12 }, { text: 'Nombre', bold: true, fontSize: 12 }, { text: 'Dirección', bold: true, fontSize: 12 }, { text: 'No. de materiales', bold: true, fontSize: 12 }]);
 
                 lugares.map(function (d) {
@@ -73,9 +80,9 @@ exports.default = {
                     materiales.map(function (m) {
                         var nombreMateriales = [];
                         nombreMateriales.push(m.title);
-                        console.log(nombreMateriales);
+                        // console.log(nombreMateriales);
                     });
-                    console.log('materiales : ', materiales);
+                    // console.log('materiales : ', materiales);
                     // buscar coincidencias de id materiales en lugares-> materiales
                     datos.push([{ image: d.img ? './uploads/lugares/' + d.img : './assets/no-imagen.png', width: 50, height: 50 }, { text: d.nombre }, { text: d.direccion ? d.direccion : 'Sin dirección' }, {
                         text: d.materiales ? materiales.length : 'No tiene materiales'
@@ -83,7 +90,8 @@ exports.default = {
                     }]);
                 });
 
-                console.log(datos);
+                // console.log('Los datos: lugares ', datos);
+
 
                 var pdfDoc = require('./genera.service').create(datos, tipo);
                 pdfDoc.end();
@@ -92,7 +100,7 @@ exports.default = {
                 // return console.log(materiales);
             });
         } else {
-            console.log('Colección incorrecta');
+            // console.log('Colección incorrecta');
             return res.status(400).json({ ok: false, mensaje: 'Colección incorrecta' });
         }
 

@@ -3,3 +3,4 @@
 /src/api/resources/config
 /.vscode
 /src/api/resources/config/env/development.js
+/dist

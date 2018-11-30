@@ -71,6 +71,7 @@ export default {
 
             let lug1 = {
                 nombre: body.nombre,
+                direccion: body.direccion,
                 usuario: req.currentUser._id,
             }
 
