@@ -59,7 +59,7 @@ export default {
 
     async bienvenida(req, res) {
         try {
-            return res.status(200).json({ok: true, mensaje: 'Bienvenido'});
+            return res.status(200).json({ ok: true, mensaje: 'Bienvenido' });
         } catch (error) {
             return res.status(500).json({
                 ok: false,
@@ -80,9 +80,9 @@ export default {
             }
 
             const materiales = await Material.find()
-                .populate('lugar','nombre')
+                .populate('lugar', 'nombre')
                 .populate('usuario', 'nombre apellido');
-            return res.status(200).json({ok: true, materiales});
+            return res.status(200).json({ ok: true, materiales });
         } catch (error) {
             return res.status(500).json({ ok: false, error });
         }
